@@ -184,6 +184,7 @@ with st.sidebar:
     ax.fill_between(gen, max_fit, alpha=0.15, color='#2d6a4f')
     ax.set_xlabel("Generation", color='#555', fontsize=8)
     ax.set_ylabel("Accuracy", color='#555', fontsize=8)
+    ax.set_title("Actual training run", fontsize=7, color='#888', style='italic')
     ax.tick_params(colors='#555', labelsize=7)
     for spine in ax.spines.values():
         spine.set_edgecolor('#ddd')
@@ -248,7 +249,7 @@ with tab1:
                 st.error("⚠️ Model not found! Please run train.py first.")
                 st.stop()
 
-            with st.spinner("Analyzing leaf..."):
+            with st.spinner("🧬 Running GA feature selection & analyzing leaf..."):
                 try:
                     clf, selected_features, class_names = load_models()
                     features = extract_features_from_array(img_array)
@@ -275,6 +276,13 @@ with tab1:
                     st.markdown("<br>", unsafe_allow_html=True)
 
                     # ── DISEASE INFO ──────────────────────────
+                    if not info:
+                        info = {
+                            'severity': 'None',
+                            'description': 'This leaf appears healthy with no signs of disease.',
+                            'symptoms': 'No symptoms detected.',
+                            'treatment': ['Continue regular watering and fertilisation.', 'Monitor periodically for early signs of disease.']
+                        }
                     severity_color = get_severity_color(info['severity'])
                     st.markdown(f"""
                     <div class="disease-card">
@@ -367,6 +375,9 @@ with tab2:
                     else:
                         st.error(f"⚠️ {pred.replace('_',' ')}")
                     st.metric("Confidence", f"{conf:.1f}%")
+                    disease_info = get_disease_info(pred)
+                    if disease_info:
+                        st.caption(f"Severity: {disease_info['severity']}")
 
 # ── FOOTER ───────────────────────────────────────────────────
 st.markdown("""
