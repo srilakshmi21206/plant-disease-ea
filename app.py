@@ -356,6 +356,9 @@ with tab2:
 
     if file_a and file_b:
         if st.button("⚖️ Compare Both Leaves", use_container_width=True):
+            if not os.path.exists("models/classifier.pkl"):
+                st.error("⚠️ Model not found! Please run train.py first.")
+                st.stop()
             clf, selected_features, class_names = load_models()
 
             results = []
@@ -382,6 +385,8 @@ with tab2:
 # ── FOOTER ───────────────────────────────────────────────────
 st.markdown("""
 <div class="footer">
-    Plant Disease Detector &nbsp;·&nbsp; DEAP + Scikit-learn + Streamlit &nbsp;·&nbsp;Srilakshmi.k &nbsp;·&nbsp; JAIN University 2026
+    Plant Disease Detector &nbsp;·&nbsp; DEAP + Scikit-learn + Streamlit &nbsp;·&nbsp; 
+    <a href="https://github.com/srilakshmi21206/plant-disease-ea" target="_blank" style="color:#2d6a4f">GitHub</a>
+    &nbsp;·&nbsp; Srilakshmi.k &nbsp;·&nbsp; JAIN University 2026
 </div>
 """, unsafe_allow_html=True)
